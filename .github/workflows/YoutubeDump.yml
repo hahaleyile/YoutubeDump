@@ -17,11 +17,26 @@ jobs:
       run: |
         sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
         sudo chmod a+rx /usr/local/bin/youtube-dl
-        sudo apt install -y ffmpega
+        sudo apt install -y ffmpeg
         sudo timedatectl set-timezone "$TZ"
-        /usr/local/bin/youtube-dl -F $(cat url.txt)
 
     - name: download videos
-      if: success()
+      if: success() && !cancelled()
       run: |
-        echo yes
+        mkdir videos
+        cd videos
+        youtube-dl -f bestvideo[ext=mkv]/bestvideo[ext=webm]+bestaudio[ext=webm] --write-auto-sub $(cat url.txt)
+
+    - name: organize files
+      if: success() && !cancelled()
+      run: |
+        tar -cvf videos-"$(date '+%F')".tar *
+
+    - name: Upload firmware to WeTransfer
+      id: wetransfer
+      if: success() && !cancelled()
+      run: |
+        curl -fsSL git.io/file-transfer | sh
+        ./transfer wet -s -p 16 --no-progress videos-"$(date '+%F')".tar 2>&1 | tee wetransfer.log
+        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
+        echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
