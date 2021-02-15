@@ -12,10 +12,16 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
 
-    - name: Initialization environment
+    - name: initialization environment
+      id: initialization
       run: |
         sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
         sudo chmod a+rx /usr/local/bin/youtube-dl
-        sudo apt install -y ffmpeg
+        sudo apt install -y ffmpega
         sudo timedatectl set-timezone "$TZ"
         /usr/local/bin/youtube-dl -F $(cat url.txt)
+
+    - name: download videos
+      if: success()
+      run: |
+        echo yes
