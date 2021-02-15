@@ -25,7 +25,7 @@ jobs:
       run: |
         mkdir videos
         cd videos
-        youtube-dl -f bestvideo[ext=mkv]/bestvideo[ext=webm]+bestaudio[ext=webm] --write-auto-sub $(cat url.txt)
+        youtube-dl -f bestvideo[ext=mkv]/bestvideo[ext=webm]+bestaudio[ext=webm] --write-auto-sub $(cat ../url.txt)
 
     - name: organize files
       if: success() && !cancelled()
