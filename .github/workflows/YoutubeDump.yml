@@ -25,7 +25,7 @@ jobs:
       run: |
         mkdir videos
         cd videos
-        youtube-dl --merge-output-format mp4 -f bestvideo[ext=webm]+bestaudio[ext=m4a]/bestvideo[ext=mp4]+bestaudio[ext=m4a] --write-auto-sub $(cat ../url.txt)
+        youtube-dl --merge-output-format mp4 -f bestvideo[ext=mp4]+bestaudio[ext=m4a] --write-auto-sub $(cat ../url.txt)
 
     - name: organize files
       if: success() && !cancelled()
