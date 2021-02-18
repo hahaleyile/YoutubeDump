@@ -15,7 +15,7 @@ jobs:
     - name: initialization environment
       id: initialization
       run: |
-        sudo wget https://yt-dl.org/downloads/latest/youtube-dl -O /usr/local/bin/youtube-dl
+        sudo wget https://yt-dl.org/downloads/latest/youtube-dl --no-check-certificate -O /usr/local/bin/youtube-dl
         sudo chmod a+rx /usr/local/bin/youtube-dl
         sudo apt install -y ffmpeg
         sudo timedatectl set-timezone "$TZ"
